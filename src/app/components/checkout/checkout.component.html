@@ -1,0 +1,32 @@
+<div class="checkout">
+  <div class="order-summary">
+    <h2>Order Summary</h2>
+    <ul class="cart-items">
+      <li class="cart-item">
+        <div class="product-image">
+          <img src="assets/images/products/mac.jpg" alt="Product Image" />
+        </div>
+        <div class="item-details">
+          <h3 class="product-name">Laptop</h3>
+          <p class="product-price">$999.99</p>
+        </div>
+      </li>
+      <!-- More items -->
+    </ul>
+    <div class="total">
+      <span>Total:</span>
+      <span class="total-price">$999.99</span>
+    </div>
+  </div>
+  <div class="checkout-form">
+    <h2>Shipping & Payment Information</h2>
+    <button (click)="processCheckout()" class="btn btn-success">
+      <span *ngIf="!loading">Process Checkout</span>
+      <div *ngIf="loading" class="overlay">
+        <div class="spinner-border text-light" role="status">
+          <span class="sr-only">Loading...</span>
+        </div>
+      </div>
+    </button>
+  </div>
+</div>
