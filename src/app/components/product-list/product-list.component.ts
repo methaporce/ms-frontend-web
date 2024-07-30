@@ -23,7 +23,7 @@ export class ProductListComponent {
 
   addToCart(productId: number): void {
     const cartItem = {
-      userId: 1, // Placeholder for user ID
+      userId: 1,
       productId: productId,
       quantity: 1,
     };

@@ -7,9 +7,8 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class ProductService {
-  private baseUrl = 'http://localhost:8090/api/v1';
-
-  private apiCatalogProducts = this.baseUrl + '/catalog/product/all';
+  private apiCatalogProducts =
+    environment.microserviceProducts + '/api/v1/catalog/product/all';
 
   constructor(private http: HttpClient) {}
 
