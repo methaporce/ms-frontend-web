@@ -1,28 +1,23 @@
+<br>
 <div class="cart">
-  <h2>Shopping Cart</h2>
+  <h2>Mi Carrito de Compras</h2>
   <ul class="cart-items">
-    <li class="cart-item">
+    <li class="cart-item" *ngFor="let item of cartItems">
       <div class="item-details">
-        <img
-          src="assets/images/products/mac.jpg"
-          alt="Product Image"
-          class="product-image"
-        />
+        <img [src]="item.productImage" alt="Product Image" width="100px" height="100px" />
         <div class="item-info">
-          <h3 class="product-name">Product Name</h3>
-          <p class="product-price">Price: $999.99</p>
-          <p class="product-quantity">Quantity: 1</p>
-          <button class="btn-remove">Remove</button>
+          <h3 class="product-name">{{ item.productName }}</h3>
+          <p class="product-price">Precio: {{ item.productPrice | currency }}</p>
+          <p class="product-quantity">Cantidad: {{ item.quantity }}</p>
         </div>
       </div>
     </li>
-    <!-- More items -->
   </ul>
-  <button
-    routerLink="/checkout"
-    (click)="createOrder()"
-    class="btn btn-success"
-  >
+
+  <br>
+  <h2>Total: {{ totalPrice | currency }}</h2>
+
+  <button (click)="createOrder() "routerLink="/checkout" class="btn-success" style="margin-left: 75%;">
     Create Order
   </button>
 </div>

@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 })
 export class ProductService {
   private apiCatalogProducts =
-    environment.microserviceProducts + '/api/v1/catalog/product/all';
+    environment.microserviceCatalog + '/api/v1/catalog/product/all';
 
   constructor(private http: HttpClient) {}
 

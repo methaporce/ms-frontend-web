@@ -1,19 +1,39 @@
 <div class="product-list">
   <div class="product-card" *ngFor="let product of products">
+    <h5 class="product-category">
+      {{ product.category.name }}
+    </h5>
+    <br />
     <div class="product-image">
-      <img src="/assets/images/products/mac.jpg" />
+      <img [src]="product.pathImage" alt="Product Image" />
     </div>
     <div class="product-details">
       <h3>{{ product.name }}</h3>
       <p class="product-price">{{ product.price | currency }}</p>
       <p class="product-description">{{ product.description }}</p>
-      <button
-        routerLink="/cart"
-        class="buy-button"
-        (click)="addToCart(product.id)"
-      >
-        Add to Cart
-      </button>
+      <h6 class="product-category">Disponibiles: {{ product.stock }}</h6>
+      <br>
+      <div class="form-container">
+        <form (ngSubmit)="addToCart(product.id)">
+
+          <label for="product-quantity-{{ product.id }}"> Cantidad:</label>
+          <input
+            type="number"
+            id="product-quantity-{{ product.id }}"
+            [(ngModel)]="quantities[product.id]"
+            name="quantity"
+            required
+            min="1"
+            max="{{ product.stock }}" 
+          />
+          <br>
+          <br>
+          <button type="submit" class="btn-success"
+          >Agregar al carrito
+        </button>
+
+          </form>
+      </div>
     </div>
   </div>
 </div>

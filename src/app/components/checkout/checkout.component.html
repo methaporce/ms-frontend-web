@@ -1,32 +1,98 @@
-<div class="checkout">
-  <div class="order-summary">
-    <h2>Order Summary</h2>
-    <ul class="cart-items">
-      <li class="cart-item">
-        <div class="product-image">
-          <img src="assets/images/products/mac.jpg" alt="Product Image" />
-        </div>
-        <div class="item-details">
-          <h3 class="product-name">Laptop</h3>
-          <p class="product-price">$999.99</p>
-        </div>
-      </li>
-      <!-- More items -->
-    </ul>
-    <div class="total">
-      <span>Total:</span>
-      <span class="total-price">$999.99</span>
-    </div>
-  </div>
-  <div class="checkout-form">
-    <h2>Shipping & Payment Information</h2>
-    <button (click)="processCheckout()" class="btn btn-success">
-      <span *ngIf="!loading">Process Checkout</span>
-      <div *ngIf="loading" class="overlay">
-        <div class="spinner-border text-light" role="status">
-          <span class="sr-only">Loading...</span>
+<br />
+<div class="cart">
+  <h2>Resumen de Su Compra</h2>
+  <ul class="cart-items">
+    <li class="cart-item" *ngFor="let item of cartItems">
+      <div class="item-details">
+        <img
+          [src]="item.productImage"
+          alt="Product Image"
+          class="product-image"
+        />
+        <div class="item-info">
+          <h3 class="product-name">{{ item.productName }}</h3>
+          <p class="product-price">
+            Precio: {{ item.productPrice | currency }}
+          </p>
+          <p class="product-quantity">Cantidad: {{ item.quantity }}</p>
         </div>
       </div>
-    </button>
+    </li>
+  </ul>
+  <h5 class="total">
+    Total: <span class="total-price">{{ totalPrice | currency }}</span>
+  </h5>
+
+  <h2>Información de Envío</h2>
+  <br />
+
+  <div class="form-container">
+    <form>
+      <label for="address">Dirección:</label>
+      <input
+        type="text"
+        id="address"
+        [(ngModel)]="address"
+        name="address"
+        required
+      />
+      <label for="phone">Teléfono:</label>
+      <input type="text" id="phone" [(ngModel)]="phone" name="phone" required />
+    </form>
   </div>
+  <br />
+  <h2>Datos de Pago</h2>
+
+  <div class="form-container">
+    <form>
+      <label for="cardNumber">Número de Tarjeta:</label>
+      <input
+        type="text"
+        id="cardNumber"
+        [(ngModel)]="cardNumber"
+        name="cardNumber"
+        required
+      />
+      <label for="cardName">Nombre del Titular:</label>
+      <input
+        type="text"
+        id="cardName"
+        [(ngModel)]="cardName"
+        name="cardName"
+        required
+      />
+      <label for="cardExpiration">Fecha de Vencimiento:</label>
+      <input
+        type="date"
+        id="cardExpiration"
+        [(ngModel)]="cardExpiration"
+        name="cardExpiration"
+        required
+      />
+      <label for="cardCvv">CVV:</label>
+      <input
+        type="text"
+        id="cardCvv"
+        [(ngModel)]="cardCvv"
+        name="cardCvv"
+        required
+      />
+      <label for="cardType">Tipo de Tarjeta:</label>
+      <select [(ngModel)]="cardType" name="cardType">
+        <option value="Debit">Débito</option>
+        <option value="Credit">Crédito</option>
+        <option value="Paypal">Paypal</option>
+        <option value="Other">Otro</option>
+      </select>
+      <br /><br />
+    </form>
+  </div>
+  <br />
+  <button
+    class="btn-success"
+    (click)="processCheckout()"
+    style="margin-left: 40%"
+  >
+    Realizar pedido
+  </button>
 </div>

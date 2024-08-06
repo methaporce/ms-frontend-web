@@ -92,6 +92,20 @@
   color: #00ff99;
 }
 
+.btn-danger {
+  background-color: #ff4d4d;
+  border: none;
+  border-radius: 5px;
+  color: #ffffff;
+  cursor: pointer;
+  padding: 5px 10px;
+  margin-left: 60%; /* Espacio entre el nombre y el botón */
+  transition: background-color 0.3s;
+}
+ 
+.btn-danger:hover {
+  background-color: #cc0000;
+}
 
 .form-container select {
   border: none;

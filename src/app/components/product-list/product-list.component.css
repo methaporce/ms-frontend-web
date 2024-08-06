@@ -1,0 +1,22 @@
+
+  .form-container label {
+    color: #00ff99;
+    margin-right: 14px;
+  }
+  
+  .form-container input,
+  .form-container textarea {
+    border: none;
+    border-radius: 5px;
+    width: 100px;
+    padding: 10px;
+    background-color: #1a1a1a;
+    color: #ffffff;
+  }
+  
+  .form-container input:focus,
+  .form-container textarea:focus {
+    outline: none;
+    box-shadow: 0 0 10px #00ff99;
+  }
+  
