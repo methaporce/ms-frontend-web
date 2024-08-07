@@ -10,7 +10,6 @@ import { SharedService } from 'src/app/services/shared.service';
   styleUrls: ['./product-list.component.css'],
 })
 export class ProductListComponent {
-
   products: any[] = [];
   quantities: { [key: string]: number } = {};
   cartData: any[] = [];
@@ -25,27 +24,29 @@ export class ProductListComponent {
   ngOnInit(): void {
     this.productService.getProducts().subscribe((data) => {
       this.products = data;
+
+      this.products.forEach((product) => {
+        this.quantities[product.id] = 1;
+      });
     });
   }
 
   addToCart(productId: number): void {
     const cartItem = {
-      userId: 1,
+      userId: 2,
       productId: productId,
-      quantity: this.quantities[productId] || 1
-      
+      quantity: this.quantities[productId] || 1,
     };
-    
-    this.cartService.addToCart(cartItem).subscribe((data) => {
 
+    this.cartService.addToCart(cartItem).subscribe((data) => {
       this.cartData = data;
       this.router.navigate(['/cart']);
       this.quantities[productId] = 0;
 
       this.sharedService.updateCartData(this.cartData);
 
+      // set data in local storage
+      localStorage.setItem('cartData', JSON.stringify(this.cartData));
     });
-
-    
   }
 }

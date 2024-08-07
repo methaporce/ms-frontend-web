@@ -7,8 +7,6 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root',
 })
 export class CheckoutService {
-
-
   private baseUrl = '/api/v1';
 
   private serviceCart = '/checkout';
@@ -19,5 +17,11 @@ export class CheckoutService {
 
   processCheckout(orderId: any): Observable<any> {
     return this.http.post(`${this.api}${this.serviceCart}/process`, orderId);
+  }
+
+  getCheckout(checkoutId: any): Observable<any> {
+    return this.http.get(`${this.api}${this.serviceCart}/getOrderCheckout`, {
+      params: { id: checkoutId },
+    });
   }
 }

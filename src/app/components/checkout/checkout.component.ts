@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { CartService } from 'src/app/services/cart.service';
 import { CheckoutService } from 'src/app/services/checkout.service';
+import { OrderService } from 'src/app/services/order.service';
 import { SharedService } from 'src/app/services/shared.service';
 
 @Component({
@@ -21,28 +23,33 @@ export class CheckoutComponent {
   cardCvv: string = '';
   cardExpiration: string = '';
   cardType: string = '';
-  
-  cartId: number = 0;
 
+  orderId: number = 0;
 
-
-  constructor(private checkoutService: CheckoutService,
+  constructor(
+    private checkoutService: CheckoutService,
     private sharedService: SharedService,
-    private cartService: CartService
-
+    private orderService: OrderService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
-    this.sharedService.currentCartData.subscribe((cartData: any) => {
-      this.cartId = cartData[0].cartId;
+    const storageOrderData = JSON.parse(
+      localStorage.getItem('orderData') || '{}'
+    );
 
-      this.cartService.getCart(this.cartId).subscribe((data) => {
-        this.cartItems = data;
-        let totalPrice = this.cartItems.forEach((item) => {
-          this.totalPrice += item.productPrice * item.quantity;
-        });
+    if (storageOrderData != '{}') {
+      this.orderId = storageOrderData.orderId;
+      this.totalPrice = storageOrderData.orderTotalToPay;
+      this.cartItems = storageOrderData.products;
+    } else {
+      this.sharedService.currentCartData.subscribe((cartData: any) => {
+        this.orderId = cartData[0].orderId;
+        this.totalPrice = cartData[0].orderTotalToPay;
+
+        this.cartItems = cartData[0].products;
       });
-    });
+    }
   }
 
   processCheckout(): void {
@@ -50,13 +57,16 @@ export class CheckoutComponent {
 
     setTimeout(() => {
       const checkout = {
-        orderId: 1, // Placeholder para el ID del pedido
+        orderId: this.orderId,
       };
+
       this.checkoutService.processCheckout(checkout).subscribe(() => {
-        alert('Checkout processed');
+        this.router.navigate(['/']);
+        localStorage.removeItem('orderData');
+        this.sharedService.clearCart();
       });
 
       this.loading = false;
-    }, 2000);
+    }, 3000);
   }
 }

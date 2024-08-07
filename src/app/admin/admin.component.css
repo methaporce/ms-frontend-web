@@ -90,6 +90,16 @@
   padding: 10px;
   margin-bottom: 10px;
   color: #00ff99;
+  display: flex;
+  /* Flexbox for aligning items */
+  justify-content: space-between;
+  /* Space between items */
+  align-items: center;
+  /* Center items vertically */
+}
+
+.category-name {
+  flex-grow: 1;
 }
 
 .btn-danger {
@@ -99,10 +109,9 @@
   color: #ffffff;
   cursor: pointer;
   padding: 5px 10px;
-  margin-left: 60%; /* Espacio entre el nombre y el botón */
   transition: background-color 0.3s;
 }
- 
+
 .btn-danger:hover {
   background-color: #cc0000;
 }

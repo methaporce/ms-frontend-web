@@ -1,13 +1,13 @@
 <div class="admin-container">
-
   <div class="categories-column">
     <h3>Categorías Existentes</h3>
     <ul>
       <li *ngFor="let category of categories">
         {{ category.name }}
 
-        <!--<button class="btn-danger" (click)="deleteCategory(category.id)">Eliminar</button>
-      --->
+        <button class="btn-danger" (click)="deleteCategory(category.id)">
+          Eliminar
+        </button>
       </li>
     </ul>
   </div>
@@ -90,6 +90,4 @@
       </form>
     </div>
   </div>
-
- 
 </div>

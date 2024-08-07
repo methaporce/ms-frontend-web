@@ -9,6 +9,9 @@ import { CheckoutComponent } from './components/checkout/checkout.component';
 import { HttpClientModule } from '@angular/common/http';
 import { AdminComponent } from './admin/admin.component';
 import { FormsModule } from '@angular/forms';
+import { NavbarComponent } from './navbar/navbar.component';
+import { SpinnerComponent } from './spinner/spinner.component';
+import { OrdersComponent } from './orders/orders.component';
 
 @NgModule({
   declarations: [
@@ -17,6 +20,9 @@ import { FormsModule } from '@angular/forms';
     CartComponent,
     CheckoutComponent,
     AdminComponent,
+    NavbarComponent,
+    SpinnerComponent,
+    OrdersComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, HttpClientModule, FormsModule],
   providers: [],

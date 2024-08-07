@@ -7,7 +7,6 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root',
 })
 export class OrderService {
-
   private baseUrl = '/api/v1';
 
   private serviceCart = '/order';
@@ -17,7 +16,12 @@ export class OrderService {
   constructor(private http: HttpClient) {}
 
   createOrder(order: any): Observable<any> {
-    
     return this.http.post(`${this.api}${this.serviceCart}/create`, order);
+  }
+
+  getOrder(orderId: any): Observable<any> {
+    return this.http.get(`${this.api}${this.serviceCart}/get`, {
+      params: { orderId: orderId },
+    });
   }
 }

@@ -1,23 +1,31 @@
-<br>
+<app-navbar></app-navbar>
+<br />
 <div class="cart">
   <h2>Mi Carrito de Compras</h2>
   <ul class="cart-items">
     <li class="cart-item" *ngFor="let item of cartItems">
       <div class="item-details">
-        <img [src]="item.productImage" alt="Product Image" width="100px" height="100px" />
+        <img
+          [src]="item.productImage"
+          alt="Product Image"
+          width="100px"
+          height="100px"
+        />
         <div class="item-info">
           <h3 class="product-name">{{ item.productName }}</h3>
-          <p class="product-price">Precio: {{ item.productPrice | currency }}</p>
+          <p class="product-price">
+            Precio: {{ item.productPrice | currency }}
+          </p>
           <p class="product-quantity">Cantidad: {{ item.quantity }}</p>
         </div>
       </div>
     </li>
   </ul>
 
-  <br>
+  <br />
   <h2>Total: {{ totalPrice | currency }}</h2>
 
-  <button (click)="createOrder() "routerLink="/checkout" class="btn-success" style="margin-left: 75%;">
+  <button (click)="createOrder()" class="btn-success" style="margin-left: 75%">
     Create Order
   </button>
 </div>

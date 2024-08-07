@@ -1,0 +1,39 @@
+<app-navbar></app-navbar>
+<br />
+<div class="cart">
+  <h3>Resumen de sus Compras</h3>
+  <div class="cart">
+    <h6 style="text-align: right; margin-right: 5%">
+      Compra realizada el {{ date | date : "dd/MM/yyyy" }}
+    </h6>
+
+    <div class="cart-card">
+      <div *ngFor="let item of checkoutItems" class="cart-item">
+        <div class="item-details">
+          <img
+            [src]="item.productPathImage"
+            alt="Product Image"
+            width="100px"
+            height="100px"
+          />
+          <div class="item-info">
+            <h3 class="product-name">{{ item.productName }}</h3>
+            <p class="product-price">
+              Precio: {{ item.productPrice | currency }}
+            </p>
+            <p class="product-quantity">Cantidad: {{ item.productQuantity }}</p>
+          </div>
+        </div>
+      </div>
+      <div class="order-summary">
+        <br />
+        <h5>Estado de su Compra: {{ checkoutStatus }}</h5>
+        <br />
+        <h5>Total a Pagar: {{ totalToPay | currency }}</h5>
+      </div>
+    </div>
+  </div>
+</div>
+<br />
+<br />
+<br />

@@ -1,3 +1,5 @@
+<app-navbar></app-navbar>
+
 <div class="product-list">
   <div class="product-card" *ngFor="let product of products">
     <h5 class="product-category">
@@ -12,10 +14,9 @@
       <p class="product-price">{{ product.price | currency }}</p>
       <p class="product-description">{{ product.description }}</p>
       <h6 class="product-category">Disponibiles: {{ product.stock }}</h6>
-      <br>
+      <br />
       <div class="form-container">
         <form (ngSubmit)="addToCart(product.id)">
-
           <label for="product-quantity-{{ product.id }}"> Cantidad:</label>
           <input
             type="number"
@@ -24,15 +25,12 @@
             name="quantity"
             required
             min="1"
-            max="{{ product.stock }}" 
+            max="{{ product.stock }}"
           />
-          <br>
-          <br>
-          <button type="submit" class="btn-success"
-          >Agregar al carrito
-        </button>
-
-          </form>
+          <br />
+          <br />
+          <button type="submit" class="btn-success">Agregar al carrito</button>
+        </form>
       </div>
     </div>
   </div>

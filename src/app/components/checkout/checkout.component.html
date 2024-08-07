@@ -1,3 +1,5 @@
+<app-navbar></app-navbar>
+
 <br />
 <div class="cart">
   <h2>Resumen de Su Compra</h2>
@@ -5,7 +7,7 @@
     <li class="cart-item" *ngFor="let item of cartItems">
       <div class="item-details">
         <img
-          [src]="item.productImage"
+          [src]="item.productPathImage"
           alt="Product Image"
           class="product-image"
         />
@@ -14,7 +16,7 @@
           <p class="product-price">
             Precio: {{ item.productPrice | currency }}
           </p>
-          <p class="product-quantity">Cantidad: {{ item.quantity }}</p>
+          <p class="product-quantity">Cantidad: {{ item.productQuantity }}</p>
         </div>
       </div>
     </li>
@@ -95,4 +97,8 @@
   >
     Realizar pedido
   </button>
+</div>
+
+<div *ngIf="loading">
+  <app-spinner></app-spinner>
 </div>
