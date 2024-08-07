@@ -26,6 +26,15 @@ export class CheckoutComponent {
 
   orderId: number = 0;
 
+  addingNewAddress = false;
+  addingNewCard = false;
+
+  savedAddresses = [];
+  selectedAddress = 0;
+
+  savedCards = ['Tarjeta 1', 'Tarjeta 2'];
+  selectedCard = this.savedCards[0];
+
   constructor(
     private checkoutService: CheckoutService,
     private sharedService: SharedService,
@@ -68,5 +77,21 @@ export class CheckoutComponent {
 
       this.loading = false;
     }, 3000);
+  }
+
+  showNewAddressForm() {
+    this.addingNewAddress = true;
+  }
+
+  hideNewAddressForm() {
+    this.addingNewAddress = false;
+  }
+
+  showNewCardForm() {
+    this.addingNewCard = true;
+  }
+
+  hideNewCardForm() {
+    this.addingNewCard = false;
   }
 }

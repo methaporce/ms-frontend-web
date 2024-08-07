@@ -28,7 +28,28 @@
   <h2>Información de Envío</h2>
   <br />
 
-  <div class="form-container">
+  <!-- Selector de direcciones -->
+  <div *ngIf="!addingNewAddress" class="form-container">
+    <form>
+      <label for="savedAddresses">Elegir dirección</label><br />
+      <select [(ngModel)]="selectedAddress" name="savedAddresses">
+        <option *ngFor="let address of savedAddresses" [value]="address">
+          {{ address }}
+        </option>
+      </select>
+      <br />
+      <button
+        class="btn-success"
+        (click)="showNewAddressForm()"
+        style="margin-left: 0%"
+      >
+        Agregar Nueva Dirección
+      </button>
+    </form>
+  </div>
+
+  <!-- Formulario de nueva dirección -->
+  <div *ngIf="addingNewAddress" class="form-container">
     <form>
       <label for="address">Dirección:</label>
       <input
@@ -40,12 +61,33 @@
       />
       <label for="phone">Teléfono:</label>
       <input type="text" id="phone" [(ngModel)]="phone" name="phone" required />
+      <br />
+      <button class="btn-success" (click)="hideNewAddressForm()">
+        Usar Dirección Guardada
+      </button>
     </form>
   </div>
   <br />
   <h2>Datos de Pago</h2>
 
-  <div class="form-container">
+  <!-- Selector de tarjetas -->
+  <div *ngIf="!addingNewCard" class="form-container">
+    <form>
+      <label for="savedCards">Tarjeta Guardada:</label><br />
+      <select id="savedCards" [(ngModel)]="selectedCard" name="savedCards">
+        <option *ngFor="let card of savedCards" [value]="card">
+          {{ card }}
+        </option>
+      </select>
+      <br />
+      <button class="btn-success" (click)="showNewCardForm()">
+        Agregar Nueva Tarjeta
+      </button>
+    </form>
+  </div>
+
+  <!-- Formulario de nueva tarjeta -->
+  <div *ngIf="addingNewCard" class="form-container">
     <form>
       <label for="cardNumber">Número de Tarjeta:</label>
       <input
@@ -86,7 +128,10 @@
         <option value="Paypal">Paypal</option>
         <option value="Other">Otro</option>
       </select>
-      <br /><br />
+      <br />
+      <button class="btn-success" (click)="hideNewCardForm()">
+        Usar Tarjeta Guardada
+      </button>
     </form>
   </div>
   <br />

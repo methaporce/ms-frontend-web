@@ -7,16 +7,12 @@ header {
 .container {
     display: flex;
     align-items: center;
-    /* Centra verticalmente */
     justify-content: space-between;
-    /* Distribuye el espacio sobrante entre los elementos */
     flex-wrap: wrap;
-    /* Asegura que los elementos se ajusten en pantallas pequeñas */
 }
 
 .logo {
     flex-shrink: 0;
-    /* Evita que el logo se reduzca */
 }
 
 .logo img {
@@ -28,10 +24,9 @@ nav ul {
     list-style: none;
     padding: 0;
     margin: 0;
-    display: flex;
+    align-items: center;
     justify-content: center;
     flex-wrap: wrap;
-    /* Asegura que los elementos se ajusten en pantallas pequeñas */
 }
 
 nav ul li {
@@ -41,7 +36,6 @@ nav ul li {
 nav ul li a {
     color: #ffffff;
     text-decoration: none;
-    display: flex;
     align-items: center;
 }
 
@@ -52,4 +46,23 @@ nav ul li a i {
 nav ul li a:hover {
     text-decoration: underline;
     color: #00ff99;
+}
+
+/* Dropdown */
+.nav-item .dropdown-menu {
+    background-color: #111;
+    border: 1px solid #00ff99;
+}
+
+.nav-item .dropdown-menu .dropdown-item {
+    color: #ffffff;
+}
+
+.nav-item .dropdown-menu .dropdown-item:hover {
+    background-color: #00ff99;
+    color: #111;
+}
+
+.nav-item .dropdown-menu .dropdown-divider {
+    border-color: #00ff99;
 }
