@@ -127,7 +127,7 @@ export class CheckoutComponent {
         checkout = this.modelToSendCheckout();
       }
       this.checkoutService.processCheckout(checkout).subscribe(() => {
-        this.router.navigate(['/']);
+        this.router.navigate(['/orders']);
         localStorage.removeItem('orderData');
         this.sharedService.clearCart();
       });

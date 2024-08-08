@@ -2,13 +2,13 @@
 <br />
 <div class="cart">
   <h3>Resumen de sus Compras</h3>
-  <div class="cart">
+  <div class="cart" *ngFor="let checkout of checkouts">
     <h6 style="text-align: right; margin-right: 5%">
-      Compra realizada el {{ date | date : "dd/MM/yyyy" }}
+      Compra realizada el {{ checkout.date | date : "dd/MM/yyyy" }}
     </h6>
 
     <div class="cart-card">
-      <div *ngFor="let item of checkoutItems" class="cart-item">
+      <div *ngFor="let item of checkout.products" class="cart-item">
         <div class="item-details">
           <img
             [src]="item.productPathImage"
@@ -27,13 +27,11 @@
       </div>
       <div class="order-summary">
         <br />
-        <h5>Estado de su Compra: {{ checkoutStatus }}</h5>
+        <h5>Estado de su Compra: {{ checkout.checkoutStatusTranslated }}</h5>
         <br />
-        <h5>Total a Pagar: {{ totalToPay | currency }}</h5>
+        <h5>Total a Pagar: {{ checkout.totalToPay | currency }}</h5>
       </div>
     </div>
   </div>
 </div>
-<br />
-<br />
 <br />
