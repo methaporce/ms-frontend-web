@@ -28,13 +28,28 @@
   <h2>Información de Envío</h2>
   <br />
 
-  <!-- Selector de direcciones -->
-  <div *ngIf="!addingNewAddress" class="form-container">
+  <div *ngIf="savedAddresses.length > 0" class="form-container">
     <form>
       <label for="savedAddresses">Elegir dirección</label><br />
-      <select [(ngModel)]="selectedAddress" name="savedAddresses">
-        <option *ngFor="let address of savedAddresses" [value]="address">
-          {{ address }}
+      <select
+        [value]="selectedAddress"
+        id="savedAddresses"
+        name="savedAddresses"
+      >
+        <option *ngFor="let address of savedAddresses">
+          {{
+            address.address +
+              ", " +
+              address.city +
+              ", " +
+              address.state +
+              ", " +
+              address.country +
+              ", " +
+              address.cp +
+              " - " +
+              address.phone
+          }}
         </option>
       </select>
       <br />
@@ -49,21 +64,39 @@
   </div>
 
   <!-- Formulario de nueva dirección -->
-  <div *ngIf="addingNewAddress" class="form-container">
+  <div *ngIf="savedAddresses.length == 0" class="form-container">
     <form>
-      <label for="address">Dirección:</label>
+      <label for="street">Calle:</label>
       <input
         type="text"
-        id="address"
-        [(ngModel)]="address"
-        name="address"
+        id="street"
+        [(ngModel)]="street"
+        name="street"
         required
       />
+
+      <label for="city">Ciudad:</label>
+      <input type="text" id="city" name="city" [(ngModel)]="city" required />
+
+      <label for="cp">CP:</label
+      ><input type="text" id="cp" name="cp" [(ngModel)]="cp" required />
+
+      <label for="state">Estado:</label>
+      <input type="text" id="state" name="state" [(ngModel)]="state" />
+
+      <label for="country">Pais:</label>
+      <input type="text" id="country" name="country" [(ngModel)]="country" />
+
       <label for="phone">Teléfono:</label>
       <input type="text" id="phone" [(ngModel)]="phone" name="phone" required />
       <br />
-      <button class="btn-success" (click)="hideNewAddressForm()">
-        Usar Dirección Guardada
+
+      <button
+        *ngIf="temporaryAddress.length > 0"
+        class="btn-success"
+        (click)="hideNewAddressForm()"
+      >
+        Usar dirección Guardada
       </button>
     </form>
   </div>
@@ -71,12 +104,12 @@
   <h2>Datos de Pago</h2>
 
   <!-- Selector de tarjetas -->
-  <div *ngIf="!addingNewCard" class="form-container">
+  <div *ngIf="savedCards.length > 0" class="form-container">
     <form>
       <label for="savedCards">Tarjeta Guardada:</label><br />
-      <select id="savedCards" [(ngModel)]="selectedCard" name="savedCards">
+      <select id="savedCards" [(ngModel)]="savedCards" name="savedCards">
         <option *ngFor="let card of savedCards" [value]="card">
-          {{ card }}
+          {{ "************" + card.cardNumber.substring(12, 16) + "" }}
         </option>
       </select>
       <br />
@@ -86,17 +119,8 @@
     </form>
   </div>
 
-  <!-- Formulario de nueva tarjeta -->
-  <div *ngIf="addingNewCard" class="form-container">
+  <div *ngIf="savedCards.length == 0" class="form-container">
     <form>
-      <label for="cardNumber">Número de Tarjeta:</label>
-      <input
-        type="text"
-        id="cardNumber"
-        [(ngModel)]="cardNumber"
-        name="cardNumber"
-        required
-      />
       <label for="cardName">Nombre del Titular:</label>
       <input
         type="text"
@@ -105,6 +129,16 @@
         name="cardName"
         required
       />
+      <label for="cardNumber">Número de Tarjeta:</label>
+      <input
+        type="text"
+        maxlength="16"
+        id="cardNumber"
+        [(ngModel)]="cardNumber"
+        name="cardNumber"
+        required
+      />
+
       <label for="cardExpiration">Fecha de Vencimiento:</label>
       <input
         type="date"
@@ -119,23 +153,32 @@
         id="cardCvv"
         [(ngModel)]="cardCvv"
         name="cardCvv"
+        maxlength="3"
         required
       />
       <label for="cardType">Tipo de Tarjeta:</label>
-      <select [(ngModel)]="cardType" name="cardType">
-        <option value="Debit">Débito</option>
-        <option value="Credit">Crédito</option>
-        <option value="Paypal">Paypal</option>
-        <option value="Other">Otro</option>
+      <select
+        [(ngModel)]="selectedCardType"
+        (change)="onCardTypeChange($event)"
+        name="cardType"
+      >
+        <option *ngFor="let type of cardTypes; let i = index" [value]="i + 1">
+          {{ type }}
+        </option>
       </select>
       <br />
-      <button class="btn-success" (click)="hideNewCardForm()">
+      <button
+        *ngIf="temporaryCard.length > 0"
+        class="btn-success"
+        (click)="hideNewCardForm()"
+      >
         Usar Tarjeta Guardada
       </button>
     </form>
   </div>
   <br />
   <button
+    *ngIf="validDataToRealizeCheckout()"
     class="btn-success"
     (click)="processCheckout()"
     style="margin-left: 40%"

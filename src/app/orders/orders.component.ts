@@ -30,7 +30,8 @@ export class OrdersComponent {
   constructor(private checkoutService: CheckoutService) {}
 
   ngOnInit(): void {
-    this.checkoutService.getCheckout(7).subscribe((data) => {
+    // TO DO: get orders from api
+    this.checkoutService.getCheckout(1).subscribe((data) => {
       this.checkoutItems = data.products;
       this.totals = new Array(this.checkoutItems.length - 1);
 

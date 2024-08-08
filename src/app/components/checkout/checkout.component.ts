@@ -4,6 +4,8 @@ import { CartService } from 'src/app/services/cart.service';
 import { CheckoutService } from 'src/app/services/checkout.service';
 import { OrderService } from 'src/app/services/order.service';
 import { SharedService } from 'src/app/services/shared.service';
+import { UserService } from 'src/app/services/user.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-checkout',
@@ -15,31 +17,40 @@ export class CheckoutComponent {
   cartItems: any[] = [];
   totalPrice: number = 0;
 
-  address: string = '';
+  street: string = '';
+  city: string = '';
+  state: string = '';
+  country: string = '';
+  cp: string = '';
   phone: string = '';
 
   cardNumber: string = '';
   cardName: string = '';
   cardCvv: string = '';
-  cardExpiration: string = '';
-  cardType: string = '';
+  cardExpiration: Date = new Date();
+
+  cardType: any = {
+    CREDIT_CARD: 'Credito',
+    DEBIT_CARD: 'Debito',
+  };
 
   orderId: number = 0;
 
-  addingNewAddress = false;
-  addingNewCard = false;
-
-  savedAddresses = [];
+  savedAddresses: any[] = [];
+  temporaryAddress: any = [];
   selectedAddress = 0;
 
-  savedCards = ['Tarjeta 1', 'Tarjeta 2'];
-  selectedCard = this.savedCards[0];
+  savedCards: any[] = [];
+  temporaryCard: any = [];
+  selectedCard = 0;
+  cardTypes: string[] = Object.values(this.cardType);
+  selectedCardType: number = 0;
 
   constructor(
     private checkoutService: CheckoutService,
     private sharedService: SharedService,
-    private orderService: OrderService,
-    private router: Router
+    private router: Router,
+    private userService: UserService
   ) {}
 
   ngOnInit(): void {
@@ -59,39 +70,146 @@ export class CheckoutComponent {
         this.cartItems = cartData[0].products;
       });
     }
+
+    this.userService
+      .getUserLocations(environment.userIdTest)
+      .subscribe((data: any) => {
+        this.savedAddresses = new Array(data.length - 1);
+
+        for (let index = 0; index < data.length; index++) {
+          this.savedAddresses.push({
+            address: data[index].address,
+            city: data[index].city,
+            state: data[index].state,
+            country: data[index].country,
+            cp: data[index].postalCode,
+            phone: data[index].user.phone,
+          });
+        }
+      });
+
+    this.userService
+      .getCardsByUserId(environment.userIdTest)
+      .subscribe((data: any) => {
+        this.savedCards = new Array(data.length - 1);
+
+        for (let index = 0; index < data.length; index++) {
+          this.savedCards.push({
+            cardNumber: data[index].cardNumber,
+            cvv: data[index].cvv,
+            expiration: data[index].expiration,
+            paymentMethodId: data[index].paymentMethod.id, //TODO: PAYMENT METHOD ID
+          });
+        }
+      });
   }
 
   processCheckout(): void {
     this.loading = true;
 
+    let checkout = {};
+
     setTimeout(() => {
-      const checkout = {
-        orderId: this.orderId,
-      };
+      if (this.savedAddresses.length > 0 && this.savedCards.length > 0) {
+        checkout = this.modelToSendCheckoutSaved();
+      }
+
+      if (this.savedAddresses.length == 0 && this.savedCards.length == 0) {
+        checkout = this.modelToSendCheckout();
+      }
 
       this.checkoutService.processCheckout(checkout).subscribe(() => {
         this.router.navigate(['/']);
         localStorage.removeItem('orderData');
         this.sharedService.clearCart();
       });
-
-      this.loading = false;
     }, 3000);
+
+    this.loading = false;
+  }
+
+  modelToSendCheckout() {
+    return {
+      orderId: this.orderId,
+      phoneUser: this.phone,
+      userLocation: {
+        address: this.street,
+        city: this.city,
+        state: this.state,
+        country: this.country,
+        postalCode: this.cp,
+      },
+      cardUser: {
+        cardNumber: this.cardNumber,
+        cvv: this.cardCvv,
+        expiration: this.cardExpiration,
+      },
+      paymentMethodId: this.selectedCardType,
+    };
+  }
+
+  modelToSendCheckoutSaved() {
+    return {
+      orderId: this.orderId,
+      phoneUser: this.savedAddresses[this.selectedAddress].phone,
+      userLocation: {
+        address: this.savedAddresses[this.selectedAddress].address,
+        city: this.savedAddresses[this.selectedAddress].city,
+        state: this.savedAddresses[this.selectedAddress].state,
+        country: this.savedAddresses[this.selectedAddress].country,
+        postalCode: this.savedAddresses[this.selectedAddress].cp,
+      },
+      cardUser: {
+        cardNumber: this.savedCards[this.selectedCard].cardNumber,
+        cvv: this.savedCards[this.selectedCard].cvv,
+        expiration: this.savedCards[this.selectedCard].expiration,
+      },
+      paymentMethodId: this.savedCards[this.selectedCard].paymentMethodId,
+    };
   }
 
   showNewAddressForm() {
-    this.addingNewAddress = true;
+    this.temporaryAddress = this.savedAddresses;
+    this.savedAddresses = [];
   }
 
   hideNewAddressForm() {
-    this.addingNewAddress = false;
+    this.savedAddresses = this.temporaryAddress;
+    this.temporaryAddress = [];
   }
 
   showNewCardForm() {
-    this.addingNewCard = true;
+    this.temporaryCard = this.savedCards;
+    this.savedCards = [];
   }
 
   hideNewCardForm() {
-    this.addingNewCard = false;
+    this.savedCards = this.temporaryCard;
+    this.temporaryCard = [];
+  }
+
+  validDataToRealizeCheckout(): boolean {
+    if (
+      (this.street &&
+        this.city &&
+        this.state &&
+        this.country &&
+        this.cp &&
+        this.phone &&
+        this.cardNumber &&
+        this.cardCvv &&
+        this.cardExpiration &&
+        this.cardName &&
+        this.selectedCardType > 0) ||
+      (this.savedAddresses.length > 0 && this.savedCards.length > 0)
+    ) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  onCardTypeChange(event: any) {
+    this.selectedCardType = event.target.value;
   }
 }
