@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { catchError } from 'rxjs';
 import { CartService } from 'src/app/services/cart.service';
 import { CheckoutService } from 'src/app/services/checkout.service';
 import { OrderService } from 'src/app/services/order.service';
@@ -73,8 +74,16 @@ export class CheckoutComponent {
 
     this.userService
       .getUserLocations(environment.userIdTest)
+      .pipe(
+        catchError((error) => {
+          if (error.status === 404) {
+            this.savedAddresses = [];
+          }
+          return [];
+        })
+      )
       .subscribe((data: any) => {
-        this.savedAddresses = new Array(data.length - 1);
+        this.savedAddresses = new Array();
 
         for (let index = 0; index < data.length; index++) {
           this.savedAddresses.push({
@@ -91,20 +100,20 @@ export class CheckoutComponent {
     this.userService
       .getCardsByUserId(environment.userIdTest)
       .subscribe((data: any) => {
-        this.savedCards = new Array(data.length - 1);
+        this.savedCards = new Array();
 
         for (let index = 0; index < data.length; index++) {
           this.savedCards.push({
             cardNumber: data[index].cardNumber,
             cvv: data[index].cvv,
             expiration: data[index].expiration,
-            paymentMethodId: data[index].paymentMethod.id, //TODO: PAYMENT METHOD ID
+            paymentMethodId: data[index].paymentMethod.id,
           });
         }
       });
   }
 
-  processCheckout(): void {
+  processCheckout() {
     this.loading = true;
 
     let checkout = {};
@@ -117,15 +126,13 @@ export class CheckoutComponent {
       if (this.savedAddresses.length == 0 && this.savedCards.length == 0) {
         checkout = this.modelToSendCheckout();
       }
-
       this.checkoutService.processCheckout(checkout).subscribe(() => {
         this.router.navigate(['/']);
         localStorage.removeItem('orderData');
         this.sharedService.clearCart();
       });
+      this.loading = false;
     }, 3000);
-
-    this.loading = false;
   }
 
   modelToSendCheckout() {
@@ -211,5 +218,9 @@ export class CheckoutComponent {
 
   onCardTypeChange(event: any) {
     this.selectedCardType = event.target.value;
+  }
+
+  onCardsChange(event: any) {
+    this.selectedCard = event.target.value;
   }
 }

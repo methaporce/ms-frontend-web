@@ -107,8 +107,13 @@
   <div *ngIf="savedCards.length > 0" class="form-container">
     <form>
       <label for="savedCards">Tarjeta Guardada:</label><br />
-      <select id="savedCards" [(ngModel)]="savedCards" name="savedCards">
-        <option *ngFor="let card of savedCards" [value]="card">
+      <select
+        id="savedCards"
+        [(ngModel)]="selectedCard"
+        (change)="onCardsChange($event)"
+        name="savedCards"
+      >
+        <option *ngFor="let card of savedCards; let i = index" [value]="i">
           {{ "************" + card.cardNumber.substring(12, 16) + "" }}
         </option>
       </select>
